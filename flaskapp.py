@@ -1,22 +1,21 @@
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
-from flask_sqlalchemy import SQLAlchemy
+from models import db
 from flask_heroku import Heroku
+from flask_sqlalchemy import SQLAlchemy
+
 
 dbname = "postgresql-rectangular-42071"
 
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS']='Content-Type'
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///" + dbname
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://" + dbname
 heroku = Heroku()
-db = SQLAlchemy(app)
+
+db = SQLAlchemy()
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), unique=True, nullable=False)
-    password = db.Column(db.String(300), nullable=False)
 
 
 db.create_all()
