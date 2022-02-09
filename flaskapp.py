@@ -4,10 +4,12 @@ from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 
+dbname = "postgresql-rectangular-42071"
+
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS']='Content-Type'
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///lit"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///" + dbname
 heroku = Heroku()
 db = SQLAlchemy(app)
 
