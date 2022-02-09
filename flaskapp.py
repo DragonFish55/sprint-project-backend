@@ -1,6 +1,6 @@
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
-from models import db
+from models import *
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
 
@@ -13,7 +13,7 @@ app.config['CORS_HEADERS']='Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://" + dbname
 heroku = Heroku()
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 
 
