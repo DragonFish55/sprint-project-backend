@@ -13,7 +13,7 @@ app.config['CORS_HEADERS']='Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://" + dbname
 heroku = Heroku()
 
-db = SQLAlchemy()
+db = SQLAlchemy(app)
 
 
 
