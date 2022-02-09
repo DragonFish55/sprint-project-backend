@@ -1,4 +1,3 @@
-from nis import cat
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
@@ -19,6 +18,8 @@ class User(db.Model):
     username = db.Column(db.String(30), unique=True, nullable=False)
     password = db.Column(db.String(300), nullable=False)
 
+
+db.create_all()
 
 #create local account
 @app.route('/signup', methods = ["POST"])
