@@ -14,4 +14,5 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "secret"
 heroku=Heroku(app)
 db.init_app(app)
-db.create_all()
+with app.app_context():
+    db.create_all()
