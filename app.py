@@ -2,7 +2,7 @@ from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 import os
-from models import db
+from flask_sqlalchemy import SQLAlchemy
 
 
 app=Flask(__name__)
@@ -14,7 +14,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku=Heroku(app)
 
 
-db.init_app(app)
+db=SQLAlchemy(app)
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -57,6 +57,5 @@ def signin():
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
+    db.create_all()
     app.run(debug=True)
