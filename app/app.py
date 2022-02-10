@@ -2,7 +2,7 @@ from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 import os
-from models import db
+from app.models import db
 
 
 app=Flask(__name__)
