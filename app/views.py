@@ -5,8 +5,8 @@ from models import User
 
 
 #create local account
-@app.route('/signup/', methods = ["POST"])
-@cross_origin(headers=['Content- Type','Authorization'])
+@app.route('/signup', methods = ["POST"])
+@cross_origin()
 def signup():
     data_in = request.get_json()
     user = data_in["username"]
@@ -24,7 +24,7 @@ def signup():
 
 #signin account
 @app.route('/signin', methods = ["POST"])
-@cross_origin(headers=['Content- Type','Authorization'])
+@cross_origin()
 def signin():
     
     data_in = request.get_json()
