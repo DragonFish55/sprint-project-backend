@@ -12,10 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://ronexffqrugnjx:5ab471aedc41d
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku=Heroku()
 
-#migrate=Migrate()
-db.init_app(app)
-#migrate.init_app(app,db)
-db.create_all()
+
 
 #create local account
 @app.route('/signup', methods = ["POST"])
