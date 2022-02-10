@@ -5,7 +5,7 @@ from models import User
 
 
 #create local account
-@app.route('/signup', methods = ["POST"])
+@app.route('/signup/', methods = ["POST"])
 @cross_origin(headers=['Content- Type','Authorization'])
 def signup():
     data_in = request.get_json()
