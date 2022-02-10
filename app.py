@@ -1,8 +1,8 @@
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
-from models import db
 import os
+from flask_sqlalchemy import SQLAlchemy
 
 
 app=Flask(__name__)
@@ -13,8 +13,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku=Heroku()
 
 
-db.init_app(app)
+db=SQLAlchemy(app)
 
+class User(db.Model):
+    __tablename__ = 'user'
+
+    _id = db.Column("id",db.Integer, primary_key=True)
+    username = db.Column(db.String(30), unique=True, nullable=False)
+    password = db.Column(db.String(300), nullable=False)
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
 #create local account
 @app.route('/signup', methods = ["POST"])
@@ -46,4 +56,5 @@ def signin():
 
 
 if __name__ == "__main__":
+    db.create_all()
     app.run(debug=True)
