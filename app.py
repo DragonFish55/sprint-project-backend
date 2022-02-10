@@ -7,7 +7,7 @@ from models import *
 
 dbname="postgresql-rectangular-42071"
 app=Flask(__name__)
-app['SECRET_KEY'] = 'scret'
+
 CORS(app)
 app.config['CORS_HEADERS']='Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost/" + dbname
@@ -17,7 +17,7 @@ heroku=Heroku()
 #migrate=Migrate()
 db.init_app(app)
 #migrate.init_app(app,db)
-db.create_all()
+
 
 #create local account
 @app.route('/signup', methods = ["POST"])
