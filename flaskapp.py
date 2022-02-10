@@ -3,21 +3,19 @@ from flask_cors import CORS, cross_origin
 from models import *
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 
 dbname = "postgresql-rectangular-42071"
-
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS']='Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://" + dbname
 heroku = Heroku()
-
+db = SQLAlchemy()
+migrate = Migrate()
 db.init_app(app)
-
-
-
-
+migrate.init_app(app,db)
 db.create_all()
 
 #create local account
