@@ -1,7 +1,7 @@
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
-from models import *
+from models import db
 import os
 
 
@@ -13,6 +13,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku=Heroku()
 
 
+db.init_app(app)
+db.create_all()
 
 #create local account
 @app.route('/signup', methods = ["POST"])
