@@ -1,11 +1,12 @@
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
-from . import app
+from app import app
 from models import User
 
 
 #create local account
 @app.route('/signup', methods = ["POST"])
+@cross_origin(headers=['Content- Type','Authorization'])
 def signup():
     data_in = request.get_json()
     user = data_in["username"]
@@ -23,6 +24,7 @@ def signup():
 
 #signin account
 @app.route('/signin', methods = ["POST"])
+@cross_origin(headers=['Content- Type','Authorization'])
 def signin():
     
     data_in = request.get_json()
