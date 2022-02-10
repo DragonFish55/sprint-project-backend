@@ -1,6 +1,6 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+
 
 db=SQLAlchemy(app)
 
@@ -18,6 +18,3 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
-migrate = Migrate(app,db)
-
-migrate.init_app(app)
