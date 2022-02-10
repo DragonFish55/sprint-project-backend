@@ -8,9 +8,11 @@ from flask_migrate import Migrate
 
 dbname="postgresql-rectangular-42071"
 app=Flask(__name__)
+app['SECRET_KEY'] = 'scret'
 CORS(app)
 app.config['CORS_HEADERS']='Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost/" + dbname
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku=Heroku()
 db=SQLAlchemy()
 migrate=Migrate()
