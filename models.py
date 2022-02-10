@@ -1,5 +1,7 @@
-from app import db
+#from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
+db=SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -11,3 +13,6 @@ class User(db.Model):
     def __init__(self, username, password):
         self.username = username
         self.password = password
+    
+    def __repr__(self):
+        return "{'username': " + self.username + ", 'password':" + self.password + "}"

@@ -1,9 +1,8 @@
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS, cross_origin
-from models import *
 from flask_heroku import Heroku
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from models import *
+
 
 
 dbname="postgresql-rectangular-42071"
@@ -14,10 +13,10 @@ app.config['CORS_HEADERS']='Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost/" + dbname
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku=Heroku()
-db=SQLAlchemy()
-migrate=Migrate()
+
+#migrate=Migrate()
 db.init_app(app)
-migrate.init_app(app,db)
+#migrate.init_app(app,db)
 db.create_all()
 
 #create local account
