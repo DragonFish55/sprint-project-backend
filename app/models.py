@@ -1,5 +1,6 @@
 
-from . import db
+from app import db
+from app import app
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -11,3 +12,6 @@ class User(db.Model):
     def __init__(self, username, password):
         self.username = username
         self.password = password
+
+with app.app_context():
+    db.create_all()

@@ -3,8 +3,6 @@ from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
 
-
-
 db=SQLAlchemy()
 app=Flask(__name__)
 CORS(app)
@@ -14,5 +12,3 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "secret"
 heroku=Heroku(app)
 db.init_app(app)
-with app.app_context():
-    db.create_all()
