@@ -14,5 +14,4 @@ class User(db.Model):
         self.username = username
         self.password = password
 
-with app.app_context():
-    db.create_all()
+db.create_all()
