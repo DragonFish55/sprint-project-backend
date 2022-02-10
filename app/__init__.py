@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
 
-db=SQLAlchemy()
+
 app=Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS']='Content-Type'
@@ -11,4 +11,3 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://ronexffqrugnjx:5ab471aedc4
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "secret"
 heroku=Heroku(app)
-db.init_app(app)
