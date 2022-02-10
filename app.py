@@ -14,7 +14,7 @@ heroku=Heroku()
 
 
 db.init_app(app)
-db.create_all()
+
 
 #create local account
 @app.route('/signup', methods = ["POST"])
