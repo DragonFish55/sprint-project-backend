@@ -40,8 +40,6 @@ def signin():
     return data_out
 
 
-def validateSignup(dataobj):
-    dataobj
 
 
 
