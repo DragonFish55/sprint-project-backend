@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from models import User
+from .models import User
 
 app=Flask(__name__)
 CORS(app)
