@@ -19,8 +19,9 @@ def signup():
         data_out = "true"
     else:
         data_out = "false"
+    data_out = jsonify(data_out)
     data_out.headers.add('Access-Control-Allow-Origin', '*')
-    return jsonify(data_out)
+    return data_out
 
 #signin account
 @app.route('/signin', methods = ["POST"])
