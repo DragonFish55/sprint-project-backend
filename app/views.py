@@ -3,9 +3,9 @@ from flask_cors import CORS, cross_origin
 from app import app
 from models import User
 
-
-CORS(app, resources={r"/api/*":{"origins":"*"}})
 app.config['CORS_HEADERS']='Content-Type'
+CORS(app)
+
 
 #create local account
 @app.route('/api/signup', methods = ["POST"])
