@@ -56,10 +56,9 @@ def signup():
     return data_in
 
 #signin account
-@app.route('/api/signin', methods = ["POST"])
+@app.route('/api/signin1', methods = ["POST"])
 @cross_origin()
 def signin():
-    
     data_in = request.get_json()
     user = data_in['username']
     password = data_in['password']
