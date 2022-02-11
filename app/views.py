@@ -3,9 +3,8 @@ from flask_cors import CORS, cross_origin
 from app import app
 from models import User
 
-app.config['CORS_HEADERS']='Content-Type'
-CORS(app, supports_credentials=True)
 
+CORS(app, supports_credentials=True)
 
 #create local account
 @app.route('/api/signup', methods = ["POST"])
@@ -26,10 +25,10 @@ def signup(response):
     
     '''
     #data_out = jsonify(data_out)
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', '*')
-    response.headers.add('Access-Control-Allow-Methods', '*')
-    response.headers.add('Access-Control-Allow-Credentials', '*')
+    response.headers.set('Access-Control-Allow-Origin', '*')
+    response.headers.set('Access-Control-Allow-Headers', '*')
+    response.headers.set('Access-Control-Allow-Methods', '*')
+    response.headers.set('Access-Control-Allow-Credentials', '*')
 
 
     return response
