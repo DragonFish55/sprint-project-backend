@@ -40,4 +40,6 @@ def signin():
     password = data_in['password']
     data_out = "true"
     data_out.headers.add('Access-Control-Allow-Origin', '*')
+    data_out.headers.add('Access-Control-Allow-Headers', '*')
+    data_out.headers.add('Access-Control-Allow-Methods', '*')
     return jsonify(data_out)
