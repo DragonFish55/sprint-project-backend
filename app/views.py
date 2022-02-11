@@ -4,12 +4,11 @@ from app import app
 from models import User
 
 
-cors = CORS(app, resources={r"/signup":{"origins":"*"}})
+CORS(app, resources={r"/api/*":{"origins":"*"}})
 app.config['CORS_HEADERS']='Content-Type'
 
 #create local account
-@app.route('/signup', methods = ["POST"])
-@cross_origin()
+@app.route('/api/signup', methods = ["POST"])
 def signup():
     data_in = request.get_json()
     user = data_in["username"]
@@ -24,11 +23,12 @@ def signup():
         data_out = "false"
     data_out = jsonify(data_out)
     data_out.headers.add('Access-Control-Allow-Origin', '*')
+    data_out.headers.add('Access-Control-Allow-Headers', '*')
+    data_out.headers.add('Access-Control-Allow-Methods', '*')
     return data_out
 
 #signin account
-@app.route('/signin', methods = ["POST"])
-@cross_origin()
+@app.route('/api/signin', methods = ["POST"])
 def signin():
     
     data_in = request.get_json()
