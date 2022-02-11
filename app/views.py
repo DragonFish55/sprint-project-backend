@@ -11,6 +11,7 @@ app.config['CORS_HEADERS']='Content-Type'
 @app.route('/api/signup', methods = ["POST"])
 def signup():
     data_in = request.get_json()
+    '''
     user = data_in["username"]
     confirm_pass = data_in['confirmpass']
     password = data_in['password']
@@ -21,10 +22,13 @@ def signup():
         data_out = "true"
     else:
         data_out = "false"
+    
+    '''
     data_out = jsonify(data_out)
     data_out.headers.add('Access-Control-Allow-Origin', '*')
     data_out.headers.add('Access-Control-Allow-Headers', '*')
     data_out.headers.add('Access-Control-Allow-Methods', '*')
+
     return data_out
 
 #signin account
