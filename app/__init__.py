@@ -1,8 +1,10 @@
-from flask import Flask, Response, request
+from flask import Flask, Response, request,jsonify
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
+from models import User
 
 app=Flask(__name__)
 cors = CORS(app)
@@ -15,6 +17,39 @@ migrate = Migrate(app,db)
 app.secret_key = "secret"
 heroku=Heroku(app)
 db.init_app(app)
+
+
+
+#create local account
+@app.route('/signup', methods = ["POST"])
+@cross_origin()
+def signup():
+    data_in = request.get_json()
+    user = data_in["username"]
+    confirm_pass = data_in['confirmpass']
+    password = data_in['password']
+    data_out = "false"
+    if(confirm_pass == password):
+        userlist = User.query.filter_by(username=user)
+        print(userlist)
+        data_out = "true"
+    else:
+        data_out = "false"
+    data_out = jsonify(data_out)
+    data_out.headers.add('Access-Control-Allow-Origin', '*')
+    return data_out
+
+#signin account
+@app.route('/signin', methods = ["POST"])
+@cross_origin()
+def signin():
+    
+    data_in = request.get_json()
+    user = data_in['username']
+    password = data_in['password']
+    data_out = "true"
+    data_out.headers.add('Access-Control-Allow-Origin', '*')
+    return jsonify(data_out)
 
 with app.app_context():
     db.create_all()
