@@ -11,7 +11,7 @@ CORS(app)
 @app.route('/api/signup', methods = ["POST"])
 @cross_origin
 def signup():
-    data_in = request.get_data()
+    data_in = request.get_json()
     print(data_in)
     '''
     user = data_in["username"]
