@@ -30,7 +30,7 @@ class User(db.Model):
 
 #create local account
 @app.route('/api/signup', methods = ["POST"])
-@cross_origin
+@cross_origin()
 def signup():
     data_in = jsonify({'data':'nane'})
     data_in.headers.add('Access-Control-Allow-Origin', '*')
@@ -57,7 +57,7 @@ def signup():
 
 #signin account
 @app.route('/api/signin', methods = ["POST"])
-@cross_origin
+@cross_origin()
 def signin():
     
     data_in = request.get_json()
