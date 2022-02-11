@@ -9,9 +9,9 @@ CORS(app)
 
 #create local account
 @app.route('/api/signup', methods = ["POST"])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def signup():
-    data_in = request.get_data()
+    data_in = jsonify({'success':'ok'})
     print(data_in)
     '''
     user = data_in["username"]
