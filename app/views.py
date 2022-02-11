@@ -9,6 +9,7 @@ CORS(app)
 
 #create local account
 @app.route('/api/signup', methods = ["POST"])
+@cross_origin
 def signup():
     data_in = request.get_data()
     print(data_in)
@@ -34,6 +35,7 @@ def signup():
 
 #signin account
 @app.route('/api/signin', methods = ["POST"])
+@cross_origin
 def signin():
     
     data_in = request.get_json()
