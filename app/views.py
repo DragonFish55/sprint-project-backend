@@ -12,7 +12,10 @@ app.config['CORS_HEADERS']='Content-Type: text/plain'
 @app.route('/api/signup', methods = ["POST"])
 @cross_origin
 def signup():
-    data_in = request.get_json()
+    data_in = jsonify({'data':'nane'})
+    data_in.headers.add('Access-Control-Allow-Origin', '*')
+    data_in.headers.add('Access-Control-Allow-Headers', '*')
+    data_in.headers.add('Access-Control-Allow-Methods', '*')
     print(data_in)
     '''
     user = data_in["username"]
@@ -28,9 +31,7 @@ def signup():
     
     '''
     #data_out = jsonify(data_out)
-    data_in.headers.add('Access-Control-Allow-Origin', '*')
-    data_in.headers.add('Access-Control-Allow-Headers', '*')
-    data_in.headers.add('Access-Control-Allow-Methods', '*')
+    
 
     return data_in
 
