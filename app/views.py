@@ -3,8 +3,9 @@ from flask_cors import CORS, cross_origin
 from app import app
 from models import User
 
-app.config['CORS_HEADERS']='Content-Type: text/plain'
 CORS(app)
+app.config['CORS_HEADERS']='Content-Type: text/plain'
+
 
 
 #create local account
