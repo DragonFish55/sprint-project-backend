@@ -9,10 +9,9 @@ CORS(app, supports_credentials=True)
 
 #create local account
 @app.route('/api/signup', methods = ["POST"])
-@cross_origin(supports_credentials=True)
-def signup():
-    data_in = jsonify({'success':'ok'})
-    print(data_in)
+@cross_origin()
+def signup(response):
+    
     '''
     user = data_in["username"]
     confirm_pass = data_in['confirmpass']
@@ -27,11 +26,11 @@ def signup():
     
     '''
     #data_out = jsonify(data_out)
-    data_in.headers.add('Access-Control-Allow-Origin', '*')
-    data_in.headers.add('Access-Control-Allow-Headers', '*')
-    data_in.headers.add('Access-Control-Allow-Methods', '*')
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', '*')
+    response.headers.add('Access-Control-Allow-Methods', '*')
 
-    return data_in
+    return response
 
 #signin account
 @app.route('/api/signin', methods = ["POST"])
