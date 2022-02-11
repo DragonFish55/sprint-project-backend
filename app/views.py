@@ -11,6 +11,7 @@ CORS(app)
 @app.route('/api/signup', methods = ["POST"])
 def signup():
     data_in = request.get_data()
+    print(data_in)
     '''
     user = data_in["username"]
     confirm_pass = data_in['confirmpass']
