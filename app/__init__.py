@@ -53,6 +53,9 @@ def signup():
         data_out = "false"
     '''
     data_out = jsonify({"hi":"thre"})
+    data_out.headers.add('Access-Control-Allow-Headers', '*')
+    data_out.headers.add('Access-Control-Allow-Methods', 'POST')
+
     return data_out
 
 #signin account
@@ -64,6 +67,8 @@ def signin():
     user = data_in['username']
     password = data_in['password']
     data_out = "true"
+    #data_out.headers.add('Access-Control-Allow-Origin', '*')
+    #data_out.headers.add('Access-Control-Allow-Headers', '*')
     return jsonify(data_out)
 
 with app.app_context():
