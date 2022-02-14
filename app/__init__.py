@@ -1,75 +1,52 @@
-from __future__ import unicode_literals
-from encodings import utf_8
 from flask import Flask, Response, request,jsonify, session
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_session import Session
+from flask_redis import FlaskRedis
 from cryptography.fernet import Fernet
+from app.models import User
+from app.src import *
 
 app=Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS']='Content-Type'
-
+app.config['SESSION_PERMANENT'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://MainUserNew:happysquash@localhost:5432/UserData"
 #app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://ronexffqrugnjx:5ab471aedc41d2a7a1f8da2a0cc912c5210dfe9ff83e2d3fb71bf4fa0692f17d@ec2-34-194-171-47.compute-1.amazonaws.com:5432/d77is03fnt6nrs"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config["SESSION_TYPE"] = "filesystem"
+app.secret_key = "secret"
+Session(app)
 db=SQLAlchemy(app)
 migrate = Migrate(app,db)
-app.secret_key = "secret"
 heroku=Heroku(app)
 db.init_app(app)
 
-class User(db.Model):
-    __tablename__ = 'user'
-
-    _id = db.Column("id",db.Integer, primary_key=True)
-    username = db.Column(db.String(30), nullable=False)
-    password = db.Column(db.String(300), nullable=False)
-    enc_key = db.Column(db.String(1000), nullable=False)
-    
-
-    def __init__(self, username, password, enc_key):
-        self.username = username
-        self.password = password
-        self.enc_key = enc_key
-        
-class Session(db.Model):
-    __tablename__ = 'session'
-
-    _id = db.Column("id",db.Integer, db.ForeignKey("user.id"))
-    sessionid = db.Column(db.String(30), nullable=False, primary_key=True)
-    
-    def __init__(self, sessionid):
-        self.sessionid = sessionid
 
 #create account
 @app.route('/api/signup', methods = ["POST"])
 @cross_origin()
 def signup():
+    data_out = 'false'
     data_in = request.get_json()
     user = data_in["username"]
-    confirm_pass = data_in['confirmpass']
     password = data_in['password']
-    data_out = "false"
-    if(confirm_pass == password):
-        find_user = User.query.filter_by(username=user).first()
-        if(find_user is None):
-            enc_key = Fernet.generate_key()
-            enc_key_dec = enc_key.decode()
-            fernet_var = Fernet(enc_key)
-            encrypted_pass = fernet_var.encrypt(password.encode())
-            firstpass = encrypted_pass.decode()
-            new_user = User(username=user,password=firstpass,enc_key=enc_key_dec)
-            db.session.add(new_user)
-            db.session.commit()
-            data_out = "true"
-        else:
-            data_out = "false"
-    else:
-        data_out = "false"
+    find_user = User.query.filter_by(username=user).first()
+    if(find_user is None):
+        enc_key = Fernet.generate_key()
+        enc_key_dec = enc_key.decode()
+        fernet_var = Fernet(enc_key)
+        encrypted_pass = fernet_var.encrypt(password.encode())
+        firstpass = encrypted_pass.decode()
+        new_user = User(username=user,password=firstpass,enc_key=enc_key_dec)
+        db.session.add(new_user)
+        db.session.commit()
+        data_out = "true"
+            
     return data_out
+    
 
 #signin account
 @app.route('/api/signin', methods = ["POST"])
