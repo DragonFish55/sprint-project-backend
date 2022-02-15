@@ -1,4 +1,5 @@
-from flask import Flask, Response, request,jsonify, session
+
+from flask import Flask, Response, render_template, request,jsonify, session
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
@@ -8,6 +9,8 @@ from flask_redis import FlaskRedis
 from cryptography.fernet import Fernet
 from app.models import User
 from app.src import *
+from http import HTTPStatus
+
 
 app=Flask(__name__)
 CORS(app)
@@ -26,12 +29,10 @@ db.init_app(app)
 
 
 
-
 @app.route('/api/logout', methods = ["POST"])
 @cross_origin()
 def logout():
-    session["username"] = None
-    session["password"] = None
+    return "hi"
 
 
 #create account
@@ -53,15 +54,16 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         data_out = "true"
+        
             
-    return data_out
+    return jsonify({'data_out':data_out})
     
 
 #signin account
 @app.route('/api/signin', methods = ["POST"])
 @cross_origin()
 def signin():
-    data_out = ''
+    data_out = 'false'
     encrypt_pass = ""
     data_in = request.get_json()
     user = data_in['username']
@@ -74,24 +76,19 @@ def signin():
         fernet_var = Fernet(enc_key)
         saved_pass = find_user.password
         encrypt_pass = fernet_var.decrypt(saved_pass.encode()).decode()
-        print(encrypt_pass)
+        #print(encrypt_pass)
         if(password == encrypt_pass):
-            session = Session.query.filter_by(id=find_user.id)
-            if(session is not None):
+            #session = Session.query.filter_by(id=find_user.id)
+           
                 #session.sessionid = 
                 #print("they are equal")
                 #find_user.sessionid = 
-                data_out = "true"
-            else:
-                data_out = 'false'
-        else:
-            data_out = "false"
+            data_out = "true"
+    return jsonify({'data_out':data_out})
     
-    print(password)
     #data_out.headers.add('Access-Control-Allow-Origin', '*')
     #data_out.headers.add('Access-Control-Allow-Headers', '*')
-    data_out = "true"
-    return data_out
+    
 
 with app.app_context():
     db.create_all()
