@@ -11,7 +11,7 @@ from flask import json
 from flask import Flask
 
 #from app.models import User
-
+'''
 class Test(LiveServerTestCase):
     def createapp(self):
         app = Flask(__name__)
@@ -22,11 +22,11 @@ class Test(LiveServerTestCase):
     def test1(self):
         http = urllib3.PoolManager()
         resp = http.request('POST', '/api/signup')
-        
-'''
-class SigninUnit(unittest.TestCase):
+  '''      
+
+class TestUnit(unittest.TestCase):
     
-    app = Flask(__name__)
+    app = app
 
     #test signup user into db
     def test_signup(self):
@@ -44,6 +44,27 @@ class SigninUnit(unittest.TestCase):
         assert data['data_out'] != "false"
         find_user = User.query.filter_by(username=user).first()
         assert find_user != None
+
+    def test_signin(self):
+        user = "mush"
+        password = "hats1fhdfggfx"
+        find_user = User.query.filter_by(username=user).first()
+        if(find_user is None):
+            resp = app.test_client().post('/api/signup',
+                                    data=json.dumps({"username":user,"password":password}),
+                                    content_type='application/json')
+        find_user = User.query.filter_by(username=user).first()
+        if(find_user is not None):
+            resp = app.test_client().post('/api/signin',
+                                        data=json.dumps({"username":user,"password":password}),
+                                        content_type='application/json')
+            assert resp.status_code == 200
+            data = json.loads(resp.get_data(as_text=True))
+            assert data['data_out'] != "false"
+            find_user = User.query.filter_by(username=user).first()
+            assert find_user != None
+        else:
+            return "error signing in"
         
     #check for 200 okay
     def test_ok(self):
@@ -59,13 +80,6 @@ class SigninUnit(unittest.TestCase):
         assert resp.status_code == 200
         
 
-#suite = flask_unittest.LiveTestSuite(app)
-#suite.addTest(unittest.makeSuite(SigninUnit))
-
-# Run the suite
-#runner = unittest.TextTestRunner(verbosity=2)
-#runner.run(suite)
-'''
 if __name__ == "__main__":
     #app.run(debug=True)
     #print("hi")

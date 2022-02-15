@@ -28,12 +28,20 @@ heroku=Heroku(app)
 db.init_app(app)
 
 
+@app.route('/api/home', methods = ["GET"])
+@cross_origin()
+def home():
+    username = ""
+    if "username" in session:
+        username = session['username']
+        jsonify({"username":username})
+
 
 @app.route('/api/logout', methods = ["POST"])
 @cross_origin()
 def logout():
-    return "hi"
-
+    session.pop('username',None)
+    return jsonify({"data_out":"to_login"})
 
 #create account
 @app.route('/api/signup', methods = ["POST"])
@@ -53,9 +61,7 @@ def signup():
         new_user = User(username=user,password=firstpass,enc_key=enc_key_dec)
         db.session.add(new_user)
         db.session.commit()
-        data_out = "true"
-        
-            
+        data_out = "true"    
     return jsonify({'data_out':data_out})
     
 
@@ -76,13 +82,7 @@ def signin():
         fernet_var = Fernet(enc_key)
         saved_pass = find_user.password
         encrypt_pass = fernet_var.decrypt(saved_pass.encode()).decode()
-        #print(encrypt_pass)
         if(password == encrypt_pass):
-            #session = Session.query.filter_by(id=find_user.id)
-           
-                #session.sessionid = 
-                #print("they are equal")
-                #find_user.sessionid = 
             data_out = "true"
     return jsonify({'data_out':data_out})
     
