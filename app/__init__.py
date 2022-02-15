@@ -25,6 +25,15 @@ heroku=Heroku(app)
 db.init_app(app)
 
 
+
+
+@app.route('/api/logout', methods = ["POST"])
+@cross_origin()
+def logout():
+    session["username"] = None
+    session["password"] = None
+
+
 #create account
 @app.route('/api/signup', methods = ["POST"])
 @cross_origin()
@@ -53,17 +62,19 @@ def signup():
 @cross_origin()
 def signin():
     data_out = ''
-    decrypt_pass = ''
+    encrypt_pass = ""
     data_in = request.get_json()
     user = data_in['username']
     password = data_in['password']
     find_user = User.query.filter_by(username=user).first()
     if(find_user is not None):
+        session["username"] = user
         enc_key = find_user.enc_key
         enc_key = enc_key.encode()
         fernet_var = Fernet(enc_key)
         saved_pass = find_user.password
         encrypt_pass = fernet_var.decrypt(saved_pass.encode()).decode()
+        print(encrypt_pass)
         if(password == encrypt_pass):
             session = Session.query.filter_by(id=find_user.id)
             if(session is not None):
@@ -75,7 +86,7 @@ def signin():
                 data_out = 'false'
         else:
             data_out = "false"
-    print(decrypt_pass)
+    
     print(password)
     #data_out.headers.add('Access-Control-Allow-Origin', '*')
     #data_out.headers.add('Access-Control-Allow-Headers', '*')
