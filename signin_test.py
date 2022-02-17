@@ -1,3 +1,5 @@
+
+'''
 from urllib import response
 from django.test import LiveServerTestCase
 from flask import jsonify
@@ -10,7 +12,7 @@ import unittest
 from flask import json
 from flask import Flask
 
-from app.models import User
+from app import User
         
 class SigninUnit(unittest.TestCase):
     
@@ -56,4 +58,4 @@ class SigninUnit(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    
+'''
