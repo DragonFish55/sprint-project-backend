@@ -9,21 +9,7 @@ from app import app
 import unittest
 from flask import json
 from flask import Flask
-
-#from app.models import User
-
-class Test(LiveServerTestCase):
-    def createapp(self):
-        app = Flask(__name__)
-        app.config['TESTING'] = True
-        app.config['LIVESERVER_PORT'] = 8000
-        app.config['LIVESERVER_TIMEOUT'] = 15
-        return app
-    def test1(self):
-        http = urllib3.PoolManager()
-        resp = http.request('POST', '/api/signup')
         
-'''
 class SigninUnit(unittest.TestCase):
     
     app = Flask(__name__)
@@ -65,9 +51,7 @@ class SigninUnit(unittest.TestCase):
 # Run the suite
 #runner = unittest.TextTestRunner(verbosity=2)
 #runner.run(suite)
-'''
+
 if __name__ == "__main__":
-    #app.run(debug=True)
-    #print("hi")
     unittest.main()
     
