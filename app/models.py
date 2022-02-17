@@ -3,8 +3,8 @@ from flask import Flask
 
 db=SQLAlchemy()
 
-class User5(db.Model):
-    __tablename__ = 'user5'
+class User(db.Model):
+    __tablename__ = 'user'
 
     _id = db.Column("id",db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False)
