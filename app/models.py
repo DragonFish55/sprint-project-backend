@@ -4,7 +4,7 @@ from flask import Flask
 db=SQLAlchemy()
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'User'
 
     _id = db.Column("id",db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False)
