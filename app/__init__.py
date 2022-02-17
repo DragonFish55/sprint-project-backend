@@ -22,10 +22,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = "secret"
 Session(app)
-db=SQLAlchemy(app)
 migrate = Migrate(app,db)
 heroku=Heroku(app)
 db.init_app(app)
+
 
 
 @app.route('/api/home', methods = ["GET"])
