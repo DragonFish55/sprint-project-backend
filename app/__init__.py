@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 from flask_session import Session
 from flask_redis import FlaskRedis
 from cryptography.fernet import Fernet
-from app.models import User
+from app.models import User5
 from app.src import *
 from http import HTTPStatus
 
@@ -51,14 +51,14 @@ def signup():
     data_in = request.get_json()
     user = data_in["username"]
     password = data_in['password']
-    find_user = User.query.filter_by(username=user).first()
+    find_user = User5.query.filter_by(username=user).first()
     if(find_user is None):
         enc_key = Fernet.generate_key()
         enc_key_dec = enc_key.decode()
         fernet_var = Fernet(enc_key)
         encrypted_pass = fernet_var.encrypt(password.encode())
         firstpass = encrypted_pass.decode()
-        new_user = User(username=user,password=firstpass,enc_key=enc_key_dec)
+        new_user = User5(username=user,password=firstpass,enc_key=enc_key_dec)
         db.session.add(new_user)
         db.session.commit()
         data_out = "true"    
@@ -74,7 +74,7 @@ def signin():
     data_in = request.get_json()
     user = data_in['username']
     password = data_in['password']
-    find_user = User.query.filter_by(username=user).first()
+    find_user = User5.query.filter_by(username=user).first()
     if(find_user is not None):
         session["username"] = user
         enc_key = find_user.enc_key
