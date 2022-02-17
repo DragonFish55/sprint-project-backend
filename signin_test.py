@@ -9,6 +9,8 @@ from app import app
 import unittest
 from flask import json
 from flask import Flask
+
+from app.models import User
         
 class SigninUnit(unittest.TestCase):
     
