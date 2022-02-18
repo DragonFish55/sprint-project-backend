@@ -39,22 +39,6 @@ class User(db.Model):
         self.password = password
         self.enc_key = enc_key
 
-
-@app.route('/api/home', methods = ["GET"])
-@cross_origin()
-def home():
-    username = ""
-    if "username" in session:
-        username = session['username']
-        jsonify({"username":username})
-
-
-@app.route('/api/logout', methods = ["POST"])
-@cross_origin()
-def logout():
-    session.pop('username',None)
-    return jsonify({"data_out":"to_login"})
-
 #create account
 @app.route('/api/signup', methods = ["POST"])
 @cross_origin()
@@ -81,22 +65,28 @@ def signup():
 @app.route('/api/signin', methods = ["POST"])
 @cross_origin()
 def signin():
-    data_out = 'false'
+    user_err = "false"
+    pass_err = "false"
     encrypt_pass = ""
     data_in = request.get_json()
     user = data_in['username']
     password = data_in['password']
     find_user = User.query.filter_by(username=user).first()
     if(find_user is not None):
-        session["username"] = user
+        user_err = "false"
+        #session["username"] = user
         enc_key = find_user.enc_key
         enc_key = enc_key.encode()
         fernet_var = Fernet(enc_key)
         saved_pass = find_user.password
         encrypt_pass = fernet_var.decrypt(saved_pass.encode()).decode()
         if(password == encrypt_pass):
-            data_out = "true"
-    return jsonify({'data_out':data_out})
+            pass_err = "false"
+        else:
+            pass_err = "true"
+    else:
+        user_err = "true"
+    return jsonify({'user_error':user_err, "pass_error":pass_err})
     
     #data_out.headers.add('Access-Control-Allow-Origin', '*')
     #data_out.headers.add('Access-Control-Allow-Headers', '*')
