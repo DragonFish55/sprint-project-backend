@@ -86,6 +86,7 @@ def signin():
             pass_err = "true"
     else:
         user_err = "true"
+        pass_err = "true"
     return jsonify({'user_error':user_err, "pass_error":pass_err})
     
     #data_out.headers.add('Access-Control-Allow-Origin', '*')
