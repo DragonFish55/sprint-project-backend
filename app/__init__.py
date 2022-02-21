@@ -97,7 +97,7 @@ def signin():
     else:
         user_err = "true"
         pass_err = "true"
-        #response_code = 404
+        response_code = 404
     return jsonify({'user_error':user_err, "pass_error":pass_err}),response_code
     
     #data_out.headers.add('Access-Control-Allow-Origin', '*')
