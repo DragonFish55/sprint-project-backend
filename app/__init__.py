@@ -1,4 +1,5 @@
 
+from urllib import response
 from flask import Flask, Response, render_template, request,jsonify, session
 from flask_cors import CORS, cross_origin
 from flask_heroku import Heroku
@@ -43,6 +44,7 @@ class User(db.Model):
 @app.route('/api/signup', methods = ["POST"])
 @cross_origin()
 def signup():
+    response_code = 200
     data_out = 'false'
     data_in = request.get_json()
     user = data_in["username"]
@@ -58,6 +60,9 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         data_out = "true"    
+    else:
+        response_code = 401
+
     return jsonify({'data_out':data_out})
     
 
@@ -65,6 +70,7 @@ def signup():
 @app.route('/api/signin', methods = ["POST"])
 @cross_origin()
 def signin():
+    response_code = 200
     user_err = "false"
     pass_err = "false"
     encrypt_pass = ""
@@ -82,16 +88,35 @@ def signin():
         encrypt_pass = fernet_var.decrypt(saved_pass.encode()).decode()
         if(password == encrypt_pass):
             pass_err = "false"
+            response_code = 200
         else:
             pass_err = "true"
+            response_code = 401  
     else:
         user_err = "true"
         pass_err = "true"
-    return jsonify({'user_error':user_err, "pass_error":pass_err})
+        response_code = 404
+    return jsonify({'user_error':user_err, "pass_error":pass_err}),response_code
     
     #data_out.headers.add('Access-Control-Allow-Origin', '*')
     #data_out.headers.add('Access-Control-Allow-Headers', '*')
-    
+
+
+#signout api
+@app.route('/api/signout', methods = ["POST"])
+@cross_origin()
+def signout():
+    response_code = 200
+    data_out = "false"
+    data_in = request.get_json()
+    user = data_in['username']
+    find_user = User.query.filter_by(username=user).first()
+    if(find_user is not None):
+        data_out = "true"
+        response_code = 200
+    else:
+        response_code = 401
+    return jsonify({'user_error':data_out}),response_code
 
 with app.app_context():
     db.create_all()
