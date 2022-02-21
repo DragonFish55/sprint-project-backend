@@ -66,7 +66,8 @@ def signup():
     return jsonify({'data_out':data_out})
     
 
-#signin account
+#returns a response code as well as an error
+#flag for both the  
 @app.route('/api/signin', methods = ["POST"])
 @cross_origin()
 def signin():
@@ -78,6 +79,7 @@ def signin():
     user = data_in['username']
     password = data_in['password']
     find_user = User.query.filter_by(username=user).first()
+    print(find_user)
     if(find_user is not None):
         user_err = "false"
         #session["username"] = user
@@ -115,7 +117,7 @@ def signout():
         data_out = "true"
         response_code = 200
     else:
-        response_code = 401
+        response_code = 404
     return jsonify({'user_error':data_out}),response_code
 
 with app.app_context():
