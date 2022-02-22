@@ -10,9 +10,11 @@ from flask_redis import FlaskRedis
 from cryptography.fernet import Fernet
 from http import HTTPStatus
 
-
+#initialize the flask app component
 app=Flask(__name__)
+#enable CORS
 CORS(app)
+#apply the headers to the app
 app.config['CORS_HEADERS']='Content-Type'
 app.config['SESSION_PERMANENT'] = False
 #app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://MainUserNew:happysquash@localhost:5432/Users"
@@ -20,12 +22,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://wirnasaasbezcl:6f
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = "secret"
+
+#create migration,session, and heroku component
 Session(app)
 db=SQLAlchemy(app)
 migrate = Migrate(app,db)
 heroku=Heroku(app)
 db.init_app(app)
 
+#define User table
 class User(db.Model):
     __tablename__ = 'user'
 
@@ -40,15 +45,18 @@ class User(db.Model):
         self.password = password
         self.enc_key = enc_key
 
-#create account
+#defines the signup api endpoint
 @app.route('/api/signup', methods = ["POST"])
 @cross_origin()
 def signup():
+    #get incoming json data
     response_code = 200
     data_out = 'false'
     data_in = request.get_json()
     user = data_in["username"]
     password = data_in['password']
+    #if username is in database generate encrypted key and
+    #create new user otherwise signup failed and output 401
     find_user = User.query.filter_by(username=user).first()
     if(find_user is None):
         enc_key = Fernet.generate_key()
@@ -66,8 +74,7 @@ def signup():
     return jsonify({'data_out':data_out}),response_code
     
 
-#returns a response code as well as an error
-#flag for both the  
+#defines the signin api endpoint
 @app.route('/api/signin', methods = ["POST"])
 @cross_origin()
 def signin():
@@ -78,6 +85,8 @@ def signin():
     data_in = request.get_json()
     user = data_in['username']
     password = data_in['password']
+    #if user is in database table decrypt the table password
+    #and if the passwords match return 200 ok otherwise return 401
     find_user = User.query.filter_by(username=user).first()
     print(find_user)
     if(find_user is not None):
@@ -112,6 +121,8 @@ def signout():
     data_out = "false"
     data_in = request.get_json()
     user = data_in['username']
+    #if user in table then respond 200 otherwise respond 404
+    #also signal user to logout if ok
     find_user = User.query.filter_by(username=user).first()
     if(find_user is not None):
         data_out = "true"
@@ -120,5 +131,6 @@ def signout():
         response_code = 404
     return jsonify({'user_error':data_out}),response_code
 
+#create app tables
 with app.app_context():
     db.create_all()
