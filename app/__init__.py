@@ -63,7 +63,7 @@ def signup():
     else:
         response_code = 401
 
-    return jsonify({'data_out':data_out})
+    return jsonify({'data_out':data_out}),response_code
     
 
 #returns a response code as well as an error
