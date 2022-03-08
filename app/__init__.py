@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
 
 #enable CORS
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, expose_headers=["set-cookie"])
 #apply the headers to the app
 app.config['CORS_HEADERS']='Content-Type'
 app.config.from_object(__name__)
