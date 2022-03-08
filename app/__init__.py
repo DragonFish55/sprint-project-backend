@@ -19,7 +19,7 @@ app.config['CORS_HEADERS']='Content-Type'
 app.config.from_object(__name__)
 app.config['SESSION_PERMANENT'] = False
 #app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://MainUserNew:happysquash@localhost:5432/Users"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://wirnasaasbezcl:6f92fec655f04e1c31787b3684d6b58baae9d4a9c9ea2f178972a3364214d4f8@ec2-3-225-79-57.compute-1.amazonaws.com:5432/da6vo8aad57bna"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://fhbtpfseeoocjm:f678550faab902ef4e830edab830cb2a44a405157c31c681a139389626a2868d@ec2-18-215-8-186.compute-1.amazonaws.com:5432/ddfrgrmem9i392"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config['SESSION_COOKIE_NAME'] = "def_session"
