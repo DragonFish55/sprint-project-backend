@@ -1,13 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
 from app import app
 from flask_migrate import Migrate
+import psycopg2
 
 db=SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://postgres:postgres@localhost/users"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://ozrbtcfskkmjvv:f8affe22e8c03cc4c12adf2ffeeae8c57e5a9c4282ac2f1e5a6854f26c495e8f@ec2-18-215-8-186.compute-1.amazonaws.com:5432/d92pkpg00p46rj"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 migrate = Migrate(app,db)
 
 #define User table
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users_tab'
 
     _id = db.Column("id",db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False)
