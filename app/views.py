@@ -75,7 +75,7 @@ def signin():
         response_code = 401
     
     resp_def = make_response((jsonify({'user_error':user_err, "pass_error":pass_err}),response_code))
-    resp_def.set_cookie("username", value=user, samesite='None', secure=True, \
+    resp_def.set_cookie("username", value=user, domain="127.0.0.1",samesite='None', secure=True, \
                                                                                     expires=datetime.datetime.now() \
                                                                                             + datetime.timedelta(days=30))
     #resp_def.headers.add('Set-Cookie','cross-site-cookie=username; SameSite=None; Secure')
@@ -94,15 +94,17 @@ def getsession(user="defuser"):
     data = None
     json_data = []
     #name = session['username']
+    print(user)
     find_user = User.query.filter_by(username=user).first()
+    print(find_user)
     if(find_user != None):
-        if(find_user.user_types != None):
+        if(find_user.user_types != ""):
             usersettings.articles_types = find_user.user_types.split(',')
             for i in usersettings.articles_types:
                 data = callApi(i)
                 data = [i,data]
                 json_data.append(data)
-                print(json_data)
+                
         else:
             response_code = 200
             json_data = "None"
@@ -147,7 +149,7 @@ def signout():
         response_code = 404
 
     resp_def = make_response((jsonify({'user_error':data_out}),response_code))
-    resp_def.set_cookie("username", value='', samesite='None', secure=True, expires=0)
+    resp_def.set_cookie("username", value='', samesite='None', domain="127.0.0.1",secure=True, expires=0)
     
     return resp_def
 
@@ -166,11 +168,14 @@ def getcategory(user="defuser", category="General"):
     p = []
     n = request.query_string.decode()
     username = user
+    print(username)
     #removes timestamp and then splits entries into list
     l = n.split("&_=")[0].split("&")
-    find_user = User.query.filter_by(username=username).first()
+    print(l)
+    find_user = User.query.filter_by(username=user).first()
+    print(find_user)
     if(find_user != None):
-        if(find_user.user_types != None):
+        if(find_user.user_types != ""):
             typechk = find_user.user_types.split(',')
         else:
             typechk = [""]
@@ -179,7 +184,7 @@ def getcategory(user="defuser", category="General"):
             
             if(param_val[1].lower() == "true"):
                 if(not(param_val[0] in typechk)):
-                    if(find_user.user_types == None):
+                    if(find_user.user_types == ""):
                         find_user.user_types = param_val[0]
                     else:
                         find_user.user_types = find_user.user_types + "," + param_val[0]
