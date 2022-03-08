@@ -1,20 +1,15 @@
 import datetime
-from datetime import timedelta
 from gettext import find
 from unicodedata import category
-from urllib import response
 from itsdangerous import json
-
-from sqlalchemy import null
 from app import app
 from flask import make_response, request,jsonify, session
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 from .models import db, User
 from cryptography.fernet import Fernet
 from app import usersettings
-from flask_restful import reqparse
 import requests
-from flask_session import Session
+
 
 
 #defines the signup api endpoint
