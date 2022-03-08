@@ -78,7 +78,7 @@ def signin():
         response_code = 401
     
     resp_def = make_response((jsonify({'user_error':user_err, "pass_error":pass_err}),response_code))
-    resp_def.set_cookie("username", value=user, domain='127.0.0.1', samesite='None', secure=True, \
+    resp_def.set_cookie("username", value=user, domain='http://127.0.0.1:3000', samesite='None', secure=True, \
                                                                                     expires=datetime.datetime.now() \
                                                                                             + datetime.timedelta(days=30))
     #resp_def.headers.add('Set-Cookie','cross-site-cookie=username; SameSite=None; Secure')
