@@ -98,7 +98,8 @@ def getsession(user="defuser"):
     find_user = User.query.filter_by(username=user).first()
     print(find_user)
     if(find_user != None):
-        if(find_user.user_types != ""):
+        print(find_user.user_types)
+        if(find_user.user_types != None):
             usersettings.articles_types = find_user.user_types.split(',')
             for i in usersettings.articles_types:
                 data = callApi(i)
@@ -175,7 +176,7 @@ def getcategory(user="defuser", category="General"):
     find_user = User.query.filter_by(username=user).first()
     print(find_user)
     if(find_user != None):
-        if(find_user.user_types != ""):
+        if(find_user.user_types != None):
             typechk = find_user.user_types.split(',')
         else:
             typechk = [""]
@@ -184,7 +185,7 @@ def getcategory(user="defuser", category="General"):
             
             if(param_val[1].lower() == "true"):
                 if(not(param_val[0] in typechk)):
-                    if(find_user.user_types == ""):
+                    if(find_user.user_types == None):
                         find_user.user_types = param_val[0]
                     else:
                         find_user.user_types = find_user.user_types + "," + param_val[0]
@@ -237,8 +238,8 @@ def getcategory(user="defuser", category="General"):
                     find_user.user_types = newstring
                     
                     db.session.commit()
-
-        usersettings.articles_types = find_user.user_types.split(',')
+        if(find_user.user_types != None):
+            usersettings.articles_types = find_user.user_types.split(',')
         print(usersettings.articles_types)
     else:
         data_out = "false"
