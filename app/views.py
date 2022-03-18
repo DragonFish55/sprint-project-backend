@@ -86,49 +86,6 @@ def signin():
    
     return resp_def
     
-    #data_out.headers.add('Access-Control-Allow-Origin', '*')
-    #data_out.headers.add('Access-Control-Allow-Headers', '*')
-
-@app.route('/api/<user>/getApiData', methods = ["GET"])
-@cross_origin(supports_credentials=True)
-def getsession(user="defuser"):
-    response_code = 200
-    data_out = None
-    data = None
-    json_data = []
-    #name = session['username']
-    find_user = User.query.filter_by(username=user).first()
-    if(find_user != None):
-        if(find_user.user_types != None):
-            usersettings.articles_types = find_user.user_types.split(',')
-            for i in usersettings.articles_types:
-                data = callApi(i)
-                data = [i,data]
-                json_data.append(data)
-                print(json_data)
-        else:
-            response_code = 200
-            json_data = "None"
-    else:
-        response_code = 401
-        data = None
-    return jsonify({"dataout":json_data}), response_code
-
-@app.route('/api/<entry>/defaultApi', methods = ["GET"])
-@cross_origin(supports_credentials=True)
-def getDefaultApi(entry="top_headline"):
-    response_code = 200
-    json_data = []
-    n = request.query_string.decode()
-    print(n)
-    if(entry == "top_headline"):
-        data = callApi("General")
-        data = ["General",data]
-    elif(entry == "everything"):
-        data = callEvery(entry)
-    json_data.append(data)
-    return jsonify({"dataout":json_data}), response_code
-
 #signout api
 @app.route('/api/signout', methods = ["POST"])
 @cross_origin(supports_credentials=True)
@@ -147,18 +104,67 @@ def signout():
         data_out = "true"
         response_code = 200
     else:
-        response_code = 404
+        response_code = 401
 
     resp_def = make_response((jsonify({'user_error':data_out}),response_code))
     resp_def.set_cookie("username", value='', samesite='None', secure=True, expires=0)
     
     return resp_def
+    
+
+@app.route('/api/<user>/getApiData', methods = ["GET"])
+@cross_origin(supports_credentials=True)
+def getCategoryData(user="defuser"):
+    response_code = 200
+    data = None
+    json_data = []
+    #name = session['username']
+    find_user = User.query.filter_by(username=user).first()
+    if(find_user != None):
+        if(find_user.user_types != "None"):
+            usersettings.articles_types = find_user.user_types.split(',')
+            for i in usersettings.articles_types:
+                data = callApi(i)
+                data = [i,data]
+                json_data.append(data)
+                print(json_data)
+        else:
+            response_code = 200
+            json_data = "None"
+    else:
+        response_code = 401
+        json_data = "None"
+    
+    return jsonify({"dataout":json_data}), response_code
+
+@app.route('/api/<entry>/defaultApi', methods = ["GET"])
+@cross_origin(supports_credentials=True)
+def getDefaultApi(entry="top_headline"):
+    response_code = 200
+    json_data = []
+    n = request.query_string.decode()
+    print(n)
+    if(entry == "top_headline"):
+        data = callApi("General")
+        data = ["General",data]
+        json_data.append(data)
+    #elif(entry == "everything"):
+    #    data = callEvery(entry)
+    else:
+        response_code = 401
+        json_data = "None"
+
+    
+    
+    return jsonify({"dataout":json_data}), response_code
+
+
 
 #defines the settings api endpoint for submitting the categories
 #to the database
 @app.route('/api/new/<user>/categories', methods = ["GET"])
 @cross_origin(supports_credentials=True)
-def getcategory(user="defuser", category="General"):
+def updateCategory(user="defuser", category="General"):
     newstring = ""
     data_out = "true"
     typechk = None
@@ -196,12 +202,6 @@ def getcategory(user="defuser", category="General"):
                             newstring = None
                         else:
                             newstring = find_user.user_types[0:find_type-1]
-                        #print(find_user.user_types[0:find_type-1])
-                        #print("i: " + str(i))
-                        #print(newstring)
-                        #print("only one")
-                        #print("---------------")
-                        
                     else:
                         if(find_type == 0):
                             if(',' in find_user.user_types):
@@ -210,30 +210,12 @@ def getcategory(user="defuser", category="General"):
                                     newstring = None
                             else:
                                 newstring = None
-                            #print(find_user.user_types[typelen:len(find_user.user_types)-1])
-                            #print("i: " + str(i))
-                            #print(newstring)
-                            #print("at beginning")
-                            #print("---------------")
-                            
                         else:
                             newstring = find_user.user_types[0:find_type-1] + "," + \
                                     find_user.user_types[(find_type+1 + typelen):len(find_user.user_types)]
                             if(newstring == ""):
-                                    newstring = None
-                            #print(find_user.user_types[0:find_type-1])
-                            #print(find_user.user_types[(find_type+1 + typelen):len(find_user.user_types)])
-                            #print("i: " + str(i))
-                            #print(newstring)
-                            #print("in middle")
-                            #print("---------------")
-                        #print("i" + str(i))
-                        #print("Beginning" + str(find_user.user_types[0:find_type-1]))
-                        #print("End" + find_user.user_types[(find_type + 1 + typelen):len(find_user.user_types)])
-                        
-                        
+                                    newstring = None              
                     find_user.user_types = newstring
-                    
                     db.session.commit()
 
         usersettings.articles_types = find_user.user_types.split(',')
@@ -246,61 +228,26 @@ def getcategory(user="defuser", category="General"):
 
     return jsonify({"dataout":data_out}), response_code
 
-'''
-#defines the endpoint for retrieving the api data
-#and sending back to the frontend
-@app.route('/api/<user>/settings', methods = ["POST"])
-@cross_origin()
-def setSettings():
-    response_code = 200
-    data_out = 'false'
-    data_in = request.get_json()
-    cat_data[i] = callApi(param_val[0])
-    i = i+1
-    for k in range(0,l,1):
-        p[k] = {param_val:cat_data[k]}
-    return jsonify({"hi":"there"})
-'''
-
-#function that updates the current category that you want to view
-def setCategory(category):
-    if(category == "Business"):
-        usersettings.articles_curr = "Business"
-    elif(category == "Entertainment"):
-        usersettings.articles_curr = "Entertainment"
-    elif(category == "Health"):
-        usersettings.articles_curr = "Health"
-    elif(category == "Science"):
-        usersettings.articles_curr = "Science"
-    elif(category == "Sports"):
-        usersettings.articles_curr = "Sports"
-    elif(category == "Technology"):
-        usersettings.articles_curr = "Technology"
-    else:
-        usersettings.articles_curr = "General"
 
 
 #function that call the api and returns the data for
 #the given category
 def callApi(category):
     api_key = usersettings.api_key
-    query = {"category":category,"apiKey":api_key, "language":"en", "pageSize":10}
+    query = {"category":category,"apiKey":api_key, "language":"en", "pageSize":1}
     req = requests.get('https://newsapi.org/v2/top-headlines', 
                         params=query)
-
     return req.json()
-    #api_key = usersettings.api_key
-    #query = {"category":category,"apiKey":api_key, "country":"us"}
-    #req = requests.get('https://newsapi.org/v2/top-headlines/sources', 
-    #                    params=query)
-    #print(req)
 
+'''
+#function for calling the everything endpoint for newsapi articles
 def callEvery(entry):
     api_key = usersettings.api_key
-    query = {"sortBy": "relevancy","language":"en","q":entry,"apiKey":api_key, "language":"en"}
+    query = {"language":"en","q":entry,"apiKey":api_key, "language":"en"}
     req = requests.get('https://newsapi.org/v2/everything', 
                         params=query)
     return req.json()
+'''
 
 #create app tables
 with app.app_context():
