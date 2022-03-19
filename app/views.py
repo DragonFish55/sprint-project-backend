@@ -99,7 +99,7 @@ def getsession(user="defuser"):
     print(find_user)
     if(find_user != None):
         print(find_user.user_types)
-        if(find_user.user_types != None):
+        if(find_user.user_types != "" and find_user.user_types != None):
             usersettings.articles_types = find_user.user_types.split(',')
             for i in usersettings.articles_types:
                 data = callApi(i)
@@ -111,7 +111,7 @@ def getsession(user="defuser"):
             json_data = "None"
     else:
         response_code = 401
-        data = None
+        json_data = "None"
     return jsonify({"dataout":json_data}), response_code
 
 @app.route('/api/<entry>/defaultApi', methods = ["GET"])
@@ -119,14 +119,19 @@ def getsession(user="defuser"):
 def getDefaultApi(entry="top_headline"):
     response_code = 200
     json_data = []
+    data = None
     n = request.query_string.decode()
-    print(n)
+    print("heyhey")
     if(entry == "top_headline"):
         data = callApi("General")
         data = ["General",data]
-    elif(entry == "everything"):
-        data = callEvery(entry)
-    json_data.append(data)
+        json_data.append(data)
+    else:
+        response_code = 401
+        json_data = "None"
+    #elif(entry == "everything"):
+    #    data = callEvery(entry)
+    
     return jsonify({"dataout":json_data}), response_code
 
 #signout api
@@ -176,7 +181,7 @@ def getcategory(user="defuser", category="General"):
     find_user = User.query.filter_by(username=user).first()
     print(find_user)
     if(find_user != None):
-        if(find_user.user_types != None):
+        if(find_user.user_types != "" and find_user.user_types != None):
             typechk = find_user.user_types.split(',')
         else:
             typechk = [""]
@@ -185,7 +190,7 @@ def getcategory(user="defuser", category="General"):
             
             if(param_val[1].lower() == "true"):
                 if(not(param_val[0] in typechk)):
-                    if(find_user.user_types == None):
+                    if(find_user.user_types == "" or find_user.user_types == None):
                         find_user.user_types = param_val[0]
                     else:
                         find_user.user_types = find_user.user_types + "," + param_val[0]
@@ -213,34 +218,17 @@ def getcategory(user="defuser", category="General"):
                                     newstring = None
                             else:
                                 newstring = None
-                            #print(find_user.user_types[typelen:len(find_user.user_types)-1])
-                            #print("i: " + str(i))
-                            #print(newstring)
-                            #print("at beginning")
-                            #print("---------------")
                             
                         else:
                             newstring = find_user.user_types[0:find_type-1] + "," + \
                                     find_user.user_types[(find_type+1 + typelen):len(find_user.user_types)]
                             if(newstring == ""):
                                     newstring = None
-                            #print(find_user.user_types[0:find_type-1])
-                            #print(find_user.user_types[(find_type+1 + typelen):len(find_user.user_types)])
-                            #print("i: " + str(i))
-                            #print(newstring)
-                            #print("in middle")
-                            #print("---------------")
-                        #print("i" + str(i))
-                        #print("Beginning" + str(find_user.user_types[0:find_type-1]))
-                        #print("End" + find_user.user_types[(find_type + 1 + typelen):len(find_user.user_types)])
-                        
-                        
                     find_user.user_types = newstring
-                    
                     db.session.commit()
-        if(find_user.user_types != None):
+
+        if(find_user.user_types != "" and find_user.user_types != None):
             usersettings.articles_types = find_user.user_types.split(',')
-        print(usersettings.articles_types)
     else:
         data_out = "false"
         response_code = 401
@@ -286,11 +274,13 @@ def setCategory(category):
 #function that call the api and returns the data for
 #the given category
 def callApi(category):
+    print(category)
     api_key = usersettings.api_key
     query = {"category":category,"apiKey":api_key, "language":"en", "pageSize":10}
     req = requests.get('https://newsapi.org/v2/top-headlines', 
                         params=query)
 
+    print(req.json())
     return req.json()
     #api_key = usersettings.api_key
     #query = {"category":category,"apiKey":api_key, "country":"us"}
