@@ -17,8 +17,8 @@ CORS(app)
 #apply the headers to the app
 app.config['CORS_HEADERS']='Content-Type'
 app.config['SESSION_PERMANENT'] = False
-#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://MainUserNew:happysquash@localhost:5432/Users"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://wirnasaasbezcl:6f92fec655f04e1c31787b3684d6b58baae9d4a9c9ea2f178972a3364214d4f8@ec2-3-225-79-57.compute-1.amazonaws.com:5432/da6vo8aad57bna"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://postgres:postgres@localhost/users"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://wirnasaasbezcl:6f92fec655f04e1c31787b3684d6b58baae9d4a9c9ea2f178972a3364214d4f8@ec2-3-225-79-57.compute-1.amazonaws.com:5432/da6vo8aad57bna"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = "secret"
@@ -32,7 +32,7 @@ db.init_app(app)
 
 #define User table
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users_tab'
 
     _id = db.Column("id",db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False)
