@@ -1,7 +1,7 @@
 from flask import Flask,json
 import unittest
 from app import app
-from app import User, db
+from app.models import User, db
 
 class SettingsUnit(unittest.TestCase):
     
