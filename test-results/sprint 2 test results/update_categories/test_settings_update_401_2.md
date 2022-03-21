@@ -12,7 +12,7 @@ tst_set_up_err
 John Paglia
 
 # Pass/Fail:
-Fail
+Pass
 
 # Comments:
 Test initialliy failed because since it is a test driven development
