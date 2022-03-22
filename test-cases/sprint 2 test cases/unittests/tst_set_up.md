@@ -48,10 +48,10 @@ John Paglia
 ### Pass/Fail Criteria
 
 (1) test_settings_update_200_Add:
-Passes if data returned has user_error as "false" and pass_error as "false" as well as a 200 status code. Otherwise test fails
+Passes if found variable is equal to 1 which indicates that all conditions succeded. Otherwise test fails
 
 (2) test_settings_update_200_Rem:
-Passes if data returned has user_error as "false" and pass_error as "true" as well as a 200 status code. Otherwise test fails
+Passes if found variable is equal to 1 which indicates that all conditions succeded. Otherwise test fails
 
 (3) test_settings_update_401:
 Passes if data returned has a "false" value as well as a 401 response code. Otherwise the test fails.
