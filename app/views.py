@@ -1,4 +1,5 @@
 import datetime
+from urllib import response
 from app import app
 from flask import make_response, request,jsonify, session
 from flask_cors import cross_origin
@@ -159,11 +160,20 @@ def signout():
     
     return resp_def
 
+@app.route('/api/category/<category>', methods = ["GET"])
+@cross_origin(supports_credentials=True)
+def getSingleCategory(category="General"):
+    response_code = 200
+    cat_name = category
+    data = callApi(cat_name)
+    return jsonify({"dataout":data}), response_code
+
+
 #defines the settings api endpoint for submitting the categories
 #to the database
 @app.route('/api/new/<user>/categories', methods = ["GET"])
 @cross_origin(supports_credentials=True)
-def getcategory(user="defuser", category="General"):
+def getcategory(user="defuser"):
     newstring = ""
     data_out = "true"
     typechk = None
