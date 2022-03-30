@@ -1,5 +1,7 @@
 import datetime
 from urllib import response
+
+from itsdangerous import json
 from app import app
 from flask import make_response, request,jsonify, session
 from flask_cors import cross_origin
@@ -135,6 +137,24 @@ def getDefaultApi(entry="top_headline"):
     
     return jsonify({"dataout":json_data}), response_code
 
+
+@app.route('/api/<user>/getCategoryList', methods = ["GET"])
+@cross_origin(supports_credentials=True)
+def getCategoryList(user="defaultuser"):
+    response_code = 200
+    types = []
+    json_data = []
+    find_user = User.query.filter_by(username=user).first()
+    if(find_user != None):
+        if(find_user.user_types != None and find_user.user_types != ""):
+            types = find_user.user_types.split(',')
+            for i in types:
+                json_data.append(i)
+        else:
+            json_data = "None"
+
+    return jsonify({"dataout":json_data}), response_code
+
 #signout api
 @app.route('/api/signout', methods = ["POST"])
 @cross_origin(supports_credentials=True)
@@ -166,7 +186,10 @@ def getSingleCategory(category="General"):
     response_code = 200
     cat_name = category
     data = callApi(cat_name)
-    return jsonify({"dataout":data}), response_code
+    data = [category,data]
+    json_data = []
+    json_data.append(data)
+    return jsonify({"dataout":json_data}), response_code
 
 
 #defines the settings api endpoint for submitting the categories
