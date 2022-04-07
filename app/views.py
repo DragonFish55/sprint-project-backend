@@ -309,7 +309,7 @@ def setCategory(category):
 def callApi(category):
     print(category)
     api_key = usersettings.api_key
-    query = {"category":category,"apiKey":api_key, "language":"en", "pageSize":10}
+    query = {"category":category,"apiKey":api_key, "language":"en", "pageSize":100}
     req = requests.get('https://newsapi.org/v2/top-headlines', 
                         params=query)
 
