@@ -152,6 +152,9 @@ def getCategoryList(user="defaultuser"):
                 json_data.append(i)
         else:
             json_data = "None"
+    else:
+        json_data = "None"
+        response_code = 401
 
     return jsonify({"dataout":json_data}), response_code
 
@@ -173,7 +176,7 @@ def signout():
         data_out = "true"
         response_code = 200
     else:
-        response_code = 404
+        response_code = 401
 
     resp_def = make_response((jsonify({'user_error':data_out}),response_code))
     resp_def.set_cookie("username", value='', samesite='None', domain="127.0.0.1",secure=True, expires=0)
