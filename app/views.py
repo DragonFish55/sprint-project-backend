@@ -5,7 +5,7 @@ from itsdangerous import json
 from app import app
 from flask import make_response, request,jsonify, session
 from flask_cors import cross_origin
-from .models import db, User
+from .models import db, User, Favorites
 from cryptography.fernet import Fernet
 from app import usersettings
 import requests
@@ -324,12 +324,37 @@ def callApi(category):
     #                    params=query)
     #print(req)
 
-def callEvery(entry):
+#defines the endpoint for adding or removing items to your favorites
+#table
+@app.route('/api/<user>/<type>/submitFavorite', methods = ["POST"])
+@cross_origin(supports_credentials=True)
+def modifyFavorite(user = "def_user", type = "def_type"):
+    pass
+
+#defines the endpoint for adding or removing items to your favorites
+#table
+@app.route('/api/<user>/getFavorites', methods = ["GET"])
+@cross_origin(supports_credentials=True)
+def getFavorites(user = "def_user"):
+    pass
+
+
+
+#defines the settings api endpoint for submitting the categories
+#to the database
+@app.route('/api/search/<search_items>', methods = ["GET"])
+@cross_origin(supports_credentials=True)
+def callEvery(search_items = ""):
+    response_code = 200
+    search_text = search_items
     api_key = usersettings.api_key
-    query = {"sortBy": "relevancy","language":"en","q":entry,"apiKey":api_key, "language":"en"}
+    query = {"pagesize":100,"sortBy": "relevancy","language":"en","q":search_items,"apiKey":api_key, "language":"en"}
     req = requests.get('https://newsapi.org/v2/everything', 
                         params=query)
-    return req.json()
+    data = [search_text,req.json()]
+    json_data = []
+    json_data.append(data)
+    return jsonify({"dataout":json_data}), response_code
 
 #create app tables
 with app.app_context():

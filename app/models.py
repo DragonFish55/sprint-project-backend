@@ -24,3 +24,27 @@ class User(db.Model):
         self.password = password
         self.enc_key = enc_key
         self.user_types = usertypes
+
+#define Favorites table
+class Favorites(db.Model):
+    __tablename__ = 'fav_tab'
+
+    _id = db.Column("id",db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)
+    type = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(1000), nullable=False)
+    author = db.Column(db.String(1000), nullable=False)
+    pub_date = db.Column(db.String(1000), nullable=True)
+    desc = db.Column(db.String(1000), nullable=False)
+    image = db.Column(db.String(1000), nullable=False)
+    source = db.Column(db.String(1000), nullable=True)
+    
+    def __init__(self, username, type, title, author, pub_date, desc, image, source):
+        self.username = username
+        self.type = type
+        self.title = title
+        self.author = author
+        self.pub_date = pub_date
+        self.desc = desc
+        self.image = image
+        self.source = source
