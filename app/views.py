@@ -329,14 +329,81 @@ def callApi(category):
 @app.route('/api/<user>/<type>/submitFavorite', methods = ["POST"])
 @cross_origin(supports_credentials=True)
 def modifyFavorite(user = "def_user", type = "def_type"):
-    pass
+    response_code = 200
+    data_out = "None"
+    data_in = request.get_json()
+    type_in = type
+    title = data_in["title"]
+    author = data_in['author']
+    pub_date = data_in['pub_date']
+    desc = data_in['desc']
+    image = data_in['image']
+    source = data_in['source']
+
+    
+    find_user = User.query.filter_by(username=user).first()
+    if(find_user is not None):
+        
+        data_out = "true"
+        if(type == "add"):
+            new_favorite = Favorites(username=user,
+                                     type=type_in,
+                                     title=title,
+                                     author=author,
+                                     pub_date=pub_date,
+                                     desc=desc,
+                                     image=image,
+                                     source=source)
+            db.session.add(new_favorite)             
+            db.session.commit()
+            
+        elif(type == "rem"):
+            find_favorite = Favorites.query.filter_by(username=user, type=type , title=title, author=author, pub_date=pub_date, desc=desc, image=image, source=source)
+            if(find_favorite is not None):
+                find_favorite.delete()
+                db.session.commit()
+                find_favorite = Favorites.query.filter_by(username=user, type=type , title=title, author=author, pub_date=pub_date, desc=desc, image=image, source=source)
+                if(find_favorite is not None):
+                    data_out = "true"
+                
+                
+            else:
+                response_code = 403
+    else:
+        response_code = 401
+
+    
+    
+    return jsonify({"dataout":data_out}), response_code
 
 #defines the endpoint for adding or removing items to your favorites
 #table
 @app.route('/api/<user>/getFavorites', methods = ["GET"])
 @cross_origin(supports_credentials=True)
 def getFavorites(user = "def_user"):
-    pass
+    response_code = 200
+    data_out = []
+    
+    find_user = User.query.filter_by(username=user).first()
+    if(find_user is not None):
+        fav_list = Favorites.query.filter_by(username=user)
+        if(fav_list is not None):
+            for i in fav_list:
+                data_out.append({"type":i.type,
+                            "title":i.title,
+                            "author":i.author,
+                            "pub_date":i.pub_date,
+                            "desc": i.desc,
+                            "image":i.image,
+                            "source":i.source})
+        else:
+            data_out = "None"
+            response_code = 403
+    else:
+        data_out = "None"
+        response_code = 401
+    
+    return jsonify({"dataout":data_out}), response_code
 
 
 
